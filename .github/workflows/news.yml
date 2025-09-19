@@ -13,10 +13,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Ensure curl is installed
+      - name: Update apt and install curl
         run: |
           sudo apt-get update
           sudo apt-get install -y curl
+          which curl
+          curl --version
 
       - name: Install SBCL
         run: sudo apt-get install -y sbcl
