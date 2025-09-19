@@ -8,12 +8,16 @@ on:
 jobs:
   fetch-news:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Ensure curl is installed
+        run: sudo apt-get update && sudo apt-get install -y curl
+
       - name: Install SBCL
-        run: sudo apt-get update && sudo apt-get install -y sbcl
+        run: sudo apt-get install -y sbcl
 
       - name: Run Common Lisp script
         run: sbcl --script scripts/fetch-news.lisp
