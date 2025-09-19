@@ -14,7 +14,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Ensure curl is installed
-        run: sudo apt-get update && sudo apt-get install -y curl
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
 
       - name: Install SBCL
         run: sudo apt-get install -y sbcl
