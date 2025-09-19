@@ -8,14 +8,26 @@
             while line
             collect line))))
 
+(defun clean-cdata (text)
+  (let ((start (search "<![CDATA[" text))
+        (end (search "]]>" text)))
+    (if (and start end)
+        (subseq text (+ start 9) end)
+        text)))
+
 (defun extract-titles (lines)
   (let ((titles '()))
-    (dolist (line lines (subseq (nreverse titles) 0 (min 3 (length titles))))
-      (when (and (search "<title>" line) (not (search "BBC News" line)))
+    (dolist (line lines)
+      (when (and (search "<title>" line)
+                 (not (search "BBC News" line)))
             (let* ((start (+ (search "<title>" line) (length "<title>")))
-                   (end (search "</title>" line)))
+                   (end (search "</title>" line))
+                   (raw (subseq line start end)))
               (when end
-                    (push (string-trim " " (subseq line start end)) titles)))))))
+                    (push (string-trim " " (clean-cdata raw)) titles))))
+      (when (>= (length titles) 3)
+            (return)))
+    (nreverse titles)))
 
 (defun save-headlines (headlines)
   (let* ((date (multiple-value-bind (sec min hour day mon year) (get-decoded-time)
