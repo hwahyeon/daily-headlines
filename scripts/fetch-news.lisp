@@ -2,7 +2,7 @@
   (let ((tmp "/tmp/bbc.xml"))
     (sb-ext:run-program "curl"
                         '("-sL" "https://feeds.bbci.co.uk/news/rss.xml" "-o" "/tmp/bbc.xml")
-                        :output t :error t)
+                        :output t :error t :search t)
     (with-open-file (in tmp :direction :input :external-format :utf-8)
       (loop for line = (read-line in nil)
             while line
